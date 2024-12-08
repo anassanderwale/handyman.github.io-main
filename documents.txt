@@ -1,0 +1,37 @@
+Documentation to run django file
+**********************************************************************************************************
+
+>>>INSTALL PYTHON 
+* In order to run the python file you should have python installed in your system 
+Here is the link to download python https://www.python.org/downloads/ 
+
+**********************************************************************************************************
+>>>ADD PYTHON TO PATH 
+* We add python to path so that we can use python commands in any folder of you machine 
+Here is how you can do it https://www.educative.io/edpresso/how-to-add-python-to-path-variable-in-windows
+
+**********************************************************************************************************
+
+>>>CREATE AND ACTIVATE PYTHON VIRTUAL ENVIRONMENT
+Virtual environments help you store all the dependencies/libraries of the projects in one place and this is how you don't disturb your entire machine for one project. 
+
+**********************************************************************************************************
+
+>>>INSTALLING ALL DEPENDENCIES IN VIRTUAL ENVIRONMENT 
+*As we have our virtual environment set up. We install all the packages of the project. 
+“pip” is a python management system which will let you install all the python libraries. 
+Make sure you are in the right directory when you run this command and you have requirements.txt in the same directory. Type ‘dir’ or ‘ls’ in your terminal to check if you are in the same directory as requirements.txt. 
+‘pip install -r requirements.txt’ will install all the packages at once and you’ll be good to go. 
+
+**********************************************************************************************************
+
+>>>RUNNING DJANGO PROJECT 
+*As all the dependencies have been installed, now you can run and test the project. 
+‘python manage.py runserver’ will run the handyman project and give a localhost in the terminal which should look something like this http://127.0.0.1:8000/ .
+
+
+************************************************************************************************************************************
+************************************************************************************************************************************
+Less Secure apps
+
+https://myaccount.google.com/lesssecureapps?pli=1&rapt=AEjHL4OqAFCZEBxKoawC5w4bnkxP1I2manbjKGTdyzwtMRSQUaEDbXoiDjl4V9PnEiD76p6KIP7uboskahkioqDO8yUhQF1b3Q

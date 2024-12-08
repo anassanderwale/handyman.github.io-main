@@ -1,0 +1,184 @@
+{% extends 'base.html' %} 
+{% load crispy_forms_tags %}
+
+
+{% block body %}
+
+<nav
+class="navbar navbar-expand-md bg-light navbar-light"
+style="padding: 10px 70px 10px 70px !important"
+>
+
+<a class="navbar-brand" href="{% url 'index' %}">Kwik-FixR</a>
+
+
+<button
+  class="navbar-toggler"
+  type="button"
+  data-toggle="collapse"
+  data-target="#collapsibleNavbar"
+>
+  <span class="navbar-toggler-icon"></span>
+</button>
+
+
+<div class="collapse navbar-collapse" id="collapsibleNavbar">
+  <ul class="navbar-nav ml-auto">
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'previous-booking' %}">My Bookings</a>
+    </li>
+
+    <li class="nav-item dropdown">
+      <div class="nav-item dropdown">
+        <a
+          href="#"
+          class="nav-link dropdown-toggle"
+          data-toggle="dropdown"
+          >Services</a
+        >
+        <div class="dropdown-menu">
+          <a href="{% url 'general-handyman' %}" class="dropdown-item">General Handyman</a>
+
+          <a href="{% url 'furniture-assembly' %}" class="dropdown-item">Furniture Assembly</a>
+          <a href="{% url 'help-moving' %}" class="dropdown-item">Help Moving</a>
+          <a href="{% url 'tv-mounting' %}" class="dropdown-item">TV Mounting</a>
+          <a href="{% url 'painting' %}" class="dropdown-item">Painting</a>
+          <a href="{% url 'disinfecting-services' %}" class="dropdown-item">Disinfecting Services</a>
+
+          <a href="{% url 'ikea-services' %}" class="dropdown-item">IKEA Services</a>
+          <a href="{% url 'all-services' %}" class="dropdown-item">All Services</a>
+
+      </div>
+      </div>
+    </li>
+
+    {% if user.is_anonymous %}
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'handyman-login' %}">Sign up / Log in</a>
+    </li>
+    <li class="nav-item become">
+      <a class="nav-link" href="{% url 'handyman-registration' %}"
+        ><button type="button" class="btn btn-outline-success tasker">
+          Become a Tasker
+        </button>
+      </a>
+    </li>
+    {% elif user.is_authenticated %}
+
+    <li class="nav-item dropdown">
+      
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{user}}
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <a class="dropdown-item" href="{% url 'customer-profile' user.id %}">Profile</a>
+        <a class="dropdown-item" href="{% url 'handyman-logout' %}">Logout</a>
+      </div>
+    </li>
+    {% endif %}
+  </ul>
+</div>
+</nav>
+
+{% if user.is_authenticated %}
+
+<div class="wrapper">
+    <div class="row">
+      <nav id="sidebar">
+        
+        
+        <ul class="list-unstyled components">
+          {% if user.is_FixR %}
+          <li class="sidebar_item">
+            <a href="{% url 'index' %}" aria-expanded="false"
+              ><i class="fa-solid fa-layer-group"></i>SERVICE REQUESTS</a
+            >
+          </li>
+          
+          <li class="sidebar_item">
+            <a href="{% url 'handyman-profile' user.id %}"><i class="fa-solid fa-image"></i>MY ACCOUNT</a>
+          </li>
+        {% elif user.is_customer %}
+        <li class="sidebar_item">
+          <a href="{% url 'customer-profile' user.id %}"><i class="fa-solid fa-image"></i>MY ACCOUNT</a>
+        </li>
+        {% endif %}
+          <li class="sidebar_item">
+            <a href="{% url 'handyman-service' %}" class="active"
+              ><i class="fa-solid fa-users"></i>SERVICES</a
+            >
+          </li>
+          <li class="sidebar_item">
+            <a href="{% url 'handyman-logout' %}"
+              ><i class="fa-solid fa-table-list"></i>LOGOUT</a
+            >
+          </li>
+        </ul>
+      </nav>
+      <div class="top-nav">
+
+         
+      
+        
+        <div class="row mt-2">
+          <div class="content col-6">
+            <h1 class="content-header1">Services</h1>
+            <div class="row person-info">
+              <a
+                href=""
+                style="border-bottom: 2px solid #1a76b0; color: #1a76b0"
+                >Add a Service</a
+              >
+            </div>
+            <div class="fields-form-4">
+
+
+              <form  method="post" class="mt-5 pt-4"  enctype="multipart/form-data">
+                
+                  {% csrf_token %}
+                <h4 style="font-weight: 400; margin-bottom: 10px">
+                  Add Services
+                </h4>
+                  {{form|crispy}}
+                <input
+                  class="save-person-info"
+                  type="submit"
+                  value="SAVE CHANGES"
+                />
+              </form>
+            </div>
+          </div>
+        </div>
+ 
+         
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      $("#sidebarCollapse").on("click", function () {
+        $("#sidebar").toggleClass("active");
+      });
+    });
+  </script>
+  <script>
+    $(".toggle-password").click(function () {
+      $(this).toggleClass("fa-eye fa-eye-slash");
+      var input = $($(this).attr("toggle"));
+      if (input.attr("type") == "password") {
+        input.attr("type", "text");
+      } else {
+        input.attr("type", "password");
+      }
+    });
+  </script>
+  {% else %}
+  In order to create services you need to have an empoyer account.
+  Please <a href="{% url 'handyman-login' %}">Login</a> to continue. 
+  {% endif %}
+
+{% endblock %}
+
+
+

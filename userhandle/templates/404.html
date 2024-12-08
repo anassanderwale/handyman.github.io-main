@@ -1,0 +1,21 @@
+{% extends 'forms.html' %}
+
+
+{% block body%}
+<div class="card">
+    <div class="card-body">
+        <h4>404 Error</h4> <br><br>
+        <div class="row h-100">
+            {% if user.is_authenticated %}
+            
+            <a href="{% url 'index' %}" class="btn btn-primary">Go back to continue</a>
+            {% else %}
+            <a href="{% url 'handyman-login' %}" class="btn btn-primary">Go back to continue</a>
+            {% endif %}
+
+            </div>
+    </div>
+    
+    </div>
+
+{% endblock %}

@@ -1,0 +1,318 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Service Approved</title>
+    <link rel="stylesheet" href="{% static 'style/style.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'bootstrap-float-label-master/bootstrap-float-label.min.css' %}"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script
+      src="https://kit.fontawesome.com/64bb69d5a5.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+
+    {% if messages %}
+
+    {% for message in messages %}
+    {% if message.tags %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endif %}
+    {% endfor %}
+    
+    {% endif %}
+
+  <nav
+    class="navbar navbar-expand-md bg-light navbar-light"
+    style="padding: 10px 70px 10px 70px !important"
+  >
+
+    <a class="navbar-brand" href="{% url 'index' %}">Kwik-FixR</a>
+
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#collapsibleNavbar"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav ml-auto">
+        {% if user.is_authenticated %}
+        {% if user.is_customer %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'previous-booking' %}">My Bookings</a>
+        </li>
+        {% endif %}
+        {% endif %}
+        <li class="nav-item dropdown">
+          <div class="nav-item dropdown">
+            <a
+              href="#"
+              class="nav-link dropdown-toggle"
+              data-toggle="dropdown"
+              >Services</a
+            >
+            <div class="dropdown-menu">
+              <a href="{% url 'general-handyman' %}" class="dropdown-item">General Handyman</a>
+              <a href="{% url 'furniture-assembly' %}" class="dropdown-item">Furniture Assembly</a>
+              <a href="{% url 'help-moving' %}" class="dropdown-item">Help Moving</a>
+              <a href="{% url 'tv-mounting' %}" class="dropdown-item">TV Mounting</a>
+              <a href="{% url 'painting' %}" class="dropdown-item">Painting</a>
+              <a href="{% url 'disinfecting-services' %}" class="dropdown-item">Disinfecting Services</a>
+              <a href="{% url 'ikea-services' %}" class="dropdown-item">IKEA Services</a>
+              <a href="{% url 'all-services' %}" class="dropdown-item">All Services</a>
+
+          </div>
+          </div>
+        </li>
+
+        {% if user.is_anonymous %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'handyman-login' %}">Sign up / Log in</a>
+        </li>
+        <li class="nav-item become">
+          <a class="nav-link" href="{% url 'handyman-registration' %}"
+            ><button type="button" class="btn btn-outline-success tasker">
+              Become a Tasker
+            </button>
+          </a>
+        </li>
+        {% elif user.is_authenticated %}
+
+        <li class="nav-item dropdown">
+          <style>
+            .avatar {
+              vertical-align: middle;
+              width: 30px;
+              height: 30px;
+              border-radius: 50%;
+            }
+            </style>
+          
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {% if user.handyman_image %}
+            <img src="{{user.handyman_image.url}}" alt="Avatar" class="avatar">
+            {{user}}
+            {% else %}
+            <img src="{% static 'img/default_profile.png' %}" alt="Avatar" class="avatar">
+            {{user}}
+          </a>
+          {% endif %}
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="{% url 'customer-profile' user.id %}">Profile</a>
+            <a class="dropdown-item" href="{% url 'handyman-logout' %}">Logout</a>
+          </div>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+
+
+    <div class="wrapper">
+      <div class="row" style="margin: 0px !important">
+        <nav id="sidebar">
+          
+
+          <ul class="list-unstyled components">
+            <li class="sidebar_item">
+              <a href="/" aria-expanded="false" class="active"
+                ><i class="fa-solid fa-layer-group"></i>SERVICE REQUESTS</a
+              >
+            </li>
+            
+            <li class="sidebar_item">
+              {% if user.is_FixR %}
+              <a href="{% url 'handyman-profile' user.id %}" class="dropdown-toggle"
+                ><i class="fa-solid fa-image"></i>MY ACCOUNT</a
+              >
+              {% elif user.is_customer %}
+              <a href="{% url 'customer-profile' user.id %}" class="dropdown-toggle"
+                ><i class="fa-solid fa-image"></i>MY ACCOUNT</a
+              >
+              {% endif %}
+            </li>
+
+            </li>
+            <li class="sidebar_item">
+              <a href="{% url 'handyman-logout' %}" class="dropdown-toggle"
+                ><i class="fa-solid fa-table-list"></i>LOGOUT</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <div class="top-nav">
+          <div class="col-12">
+            <div class="row mt-5" style="margin: 0px !important">
+              <div class="content col-12 mt-5">
+                <p class="content-text">Hello {{user}}!</p>
+                <h1 class="content-header">{{current_time}}</h1>
+                <p class="content-text1">
+                  "When you have more than you need, build a longer table not
+                  a<br />
+                  higher fence."
+                </p>
+                <p style="font-size: 13px; font-weight: bold">- Unknown</p>
+                <div class="content-item">
+                  <div class="row content-menu">
+                    <a href="{% url 'index' %}">NEW REQUESTS</a
+                    ><a
+                      href="{% url 'service-approved' %} "
+                      style="border-bottom: 2px solid #1a76b0; color: #1a76b0"
+                      >APPROVED</a
+                    >
+                    <hr class="hr-1" />
+                  </div>
+                  {% for service in services %}
+                  <div class="content-item-list">
+                    {% if service.customer.handyman_image %}
+                    <img
+                      class="content-item-img"
+                      src="{{service.customer.handyman_image.url }}"
+                      alt=""
+                    />
+                    {% else %}
+                    <img
+                      class="content-item-img"
+                      src="{% static 'img/default_profile.png' %}"
+                      alt=""
+                    />
+                    {% endif %}
+                    <p class="content-item-text">{{service.customer.firstname}} {{service.customer.lastname}}</p>
+                    <p class="content-item-text1">{{service.date_time_created}}</p>
+                    <p class="content-item-date">
+                      <span>Date</span><br />
+                      {{service.duedate}}
+                    </p>
+                    <p class="content-item-time">
+                      <span>No. hours required</span><br />
+                      {{service.hoursneeded}} hrs
+                    </p>
+                    <p class="content-item-required">
+                      <span>Time</span><br />
+                      {{service.time}}
+                    </p>
+                    <h6 style="padding-left: 55px; margin-right: 500px">
+                      {{service.description}}
+                    </h6>
+                    {% if service.service_images %}
+                    <img
+                      class="content-item-img1"
+                      src="{{service.service_images.url}}"
+                      alt=""
+                    />
+                    <div class="buttons2">
+                      {% if service.is_completed is False %}
+                     <a href="{% url 'handyman-complete' service.id %}" class="btn btn-primary" style="background-color:rgb(6, 6, 104); text-decoration:none;">Mark as Complete!</a>
+                      {% else %}
+                      <h4 style="color: rgba(10, 10, 192, 0.927); font-style:italic;">Completed!</h4>
+                      {% endif %}
+                    </div>
+
+                    {% else %}
+                    <img
+                      class="content-item-img1"
+                      src="{% static 'img/default_profile' %}"
+                      alt=""
+                      style="height:0px; width:0px;"
+                    />
+                    
+                    <div class="buttons2">
+                      {% if service.is_completed is False %}
+                     <a href="{% url 'handyman-complete' service.id %}" class="btn btn-primary" style="background-color:rgb(6, 6, 104); text-decoration:none; margin-top: 70px">Mark as Complete!</a>
+                      {% else %}
+                      <h4 style="color: rgba(10, 10, 192, 0.927); font-style:italic; margin-top: 50px">Completed!</h4>
+                      {% endif %}
+                    </div>
+                    {% endif %}
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+             
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        $("#sidebarCollapse").on("click", function () {
+          $("#sidebar").toggleClass("active");
+        });
+      });
+    </script>
+    <script>
+      $(".toggle-password").click(function () {
+        $(this).toggleClass("fa-eye fa-eye-slash");
+        var input = $($(this).attr("toggle"));
+        if (input.attr("type") == "password") {
+          input.attr("type", "text");
+        } else {
+          input.attr("type", "password");
+        }
+      });
+    </script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% for service in services %}
+  
+{% endfor %}
+

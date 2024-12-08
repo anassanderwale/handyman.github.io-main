@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block body %}
+
+<nav
+class="navbar navbar-expand-md bg-light navbar-light"
+style="padding: 10px 70px 10px 70px !important"
+>
+
+<a class="navbar-brand" href="{% url 'index' %}">Kwik-FixR</a>
+
+
+<button
+  class="navbar-toggler"
+  type="button"
+  data-toggle="collapse"
+  data-target="#collapsibleNavbar"
+>
+  <span class="navbar-toggler-icon"></span>
+</button>
+
+
+<div class="collapse navbar-collapse" id="collapsibleNavbar">
+  <ul class="navbar-nav ml-auto">
+    {% if user.is_authenticated and user.is_customer%}
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'previous-booking' %}">My Bookings</a>
+    </li>
+    {% endif %}
+    <li class="nav-item dropdown">
+      <div class="nav-item dropdown">
+        <a
+          href="#"
+          class="nav-link dropdown-toggle"
+          data-toggle="dropdown"
+          >Services</a
+        >
+        <div class="dropdown-menu">
+          <a href="{% url 'general-handyman' %}" class="dropdown-item">General Handyman</a>
+          <a href="{% url 'furniture-assembly' %}" class="dropdown-item">Furniture Assembly</a>
+          <a href="{% url 'help-moving' %}" class="dropdown-item">Help Moving</a>
+          <a href="{% url 'tv-mounting' %}" class="dropdown-item">TV Mounting</a>
+          <a href="{% url 'painting' %}" class="dropdown-item">Painting</a>
+          <a href="{% url 'disinfecting-services' %}" class="dropdown-item">Disinfecting Services</a>
+          <a href="{% url 'ikea-services' %}" class="dropdown-item">IKEA Services</a>
+          <a href="{% url 'all-services' %}" class="dropdown-item">All Services</a>
+
+      </div>
+      </div>
+    </li>
+
+    {% if user.is_anonymous %}
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'handyman-login' %}">Sign up / Log in</a>
+    </li>
+    <li class="nav-item become">
+      <a class="nav-link" href="{% url 'handyman-registration' %}"
+        ><button type="button" class="btn btn-outline-success tasker">
+          Become a Tasker
+        </button>
+      </a>
+    </li>
+    {% elif user.is_authenticated %}
+
+    <li class="nav-item dropdown">
+      <style>
+        .avatar {
+          vertical-align: middle;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+        }
+        </style>
+      
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {% if user.handyman_image %}
+        <img src="{{user.handyman_image.url}}" alt="Avatar" class="avatar">
+        {{user}}
+        {% else %}
+        <img src="{% static 'img/default_profile.png' %}" alt="Avatar" class="avatar">
+        {{user}}
+      </a>
+      {% endif %}
+      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        {% if user.is_FixR %}
+        <a class="dropdown-item" href="{% url 'handyman-profile' user.id %}">Profile</a>
+        {% elif user.is_customer %}
+        <a class="dropdown-item" href="{% url 'customer-profile' user.id %}">Profile</a>
+        {% endif %}
+        <a class="dropdown-item" href="{% url 'handyman-logout' %}">Logout</a>
+      </div>
+    </li>
+    {% endif %}
+  </ul>
+</div>
+</nav>
+
+
+
+
+{% if user.is_authenticated %}
+<div class="wrapper" >
+  <div class="user-prof user-profile-test row" >
+    <div class="top-nav top-nav-test">
+      <div class="row mt-4" style="margin: 0">
+        <div class="content col-8">
+          <h1 class="content-header1">My Account</h1>
+          <div class="row person-info">
+            <a
+              href=""
+              style="border-bottom: 2px solid #1a76b0; color: #1a76b0"
+              >Personal Information</a
+            ><a href="{% url 'change-password' %}">Change Password</a>
+          </div>
+          <div class="fields-form-4">
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              {{form|crispy}}
+              <input
+                class="save-person-info"
+                type="submit"
+                value="SAVE CHANGES"
+              />
+            </form>
+          </div>
+        </div>
+
+        
+
+      </div>
+    </div>
+    
+  </div>
+  
+</div>
+
+<script>
+  $(document).ready(function () {
+    $("#sidebarCollapse").on("click", function () {
+      $("#sidebar").toggleClass("active");
+    });
+  });
+</script>
+<script>
+  $(".toggle-password").click(function () {
+    $(this).toggleClass("fa-eye fa-eye-slash");
+    var input = $($(this).attr("toggle"));
+    if (input.attr("type") == "password") {
+      input.attr("type", "text");
+    } else {
+      input.attr("type", "password");
+    }
+  });
+</script>
+{% endif%}
+{% endblock %}
+
